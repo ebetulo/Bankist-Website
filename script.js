@@ -68,8 +68,8 @@ buttonScrollTo.addEventListener('click', function (e) {
   section1.scrollIntoView({ behavior: 'smooth' });
 });
 
-// 13.189
 // Page Navigation
+
 //Unnecessarily increasing the complexity
 // document.querySelectorAll('.nav__link').forEach(el =>
 //   el.addEventListener('click', function (e) {
@@ -82,21 +82,43 @@ buttonScrollTo.addEventListener('click', function (e) {
 // );
 
 //Alternative - Event Delegation
+//1.Add event listener to the common parent element
+//2.Determine what element originated the event
 document.querySelector('.nav__links').addEventListener('click', function (e) {
   e.preventDefault();
 
   //Matching Strategy
-  if (e.target.classList.contains('nav__link')) {
+  if (e.target.href?.includes('section')) {
     const id = e.target.getAttribute('href');
-    console.log(e.target);
-    console.log(id);
-    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+    const idCoords = document.querySelector(id).getBoundingClientRect();
+    window.scrollTo({
+      left: idCoords.left + window.pageXOffset,
+      top: idCoords.top + window.pageYOffset,
+      behavior: 'smooth',
+    });
+    //document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
   }
 });
 
-//1.Add event listener to the common parent element
-//2.Determine what element originated the event
-
+//Tabbed Component
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+//Use Event Delegation - common parent of all the elements that we're interested in
+tabsContainer.addEventListener('click', function (e) {
+  const clicked = e.target.closest('.operations__tab');
+  //Guard clause
+  if (!clicked) return;
+  //Remove active classes
+  tabs.forEach(t => t.classList.remove('operations__tab--active'));
+  tabsContent.forEach(c => c.classList.remove('operations__content--active'));
+  //Activate Tab
+  clicked.classList.add('operations__tab--active');
+  //Activate Content Area
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
 /*
 //Course
 //13.183
@@ -212,4 +234,32 @@ document.querySelector('.nav').addEventListener(
   },
   true
 );
+
+//13.190
+const h1 = document.querySelector('h1');
+//Going Downwards - Selecting Child Elements
+console.log(h1.querySelectorAll('.highlight'));
+console.log(h1.childNodes);
+console.log(h1.children);
+h1.firstElementChild.style.color = 'white';
+h1.lastElementChild.style.color = 'orangered';
+
+//Going Upwards
+console.log(h1.parentNode);
+console.log(h1.parentElement);
+
+h1.closest('.header').style.background = 'var(--gradient-secondary)';
+h1.closest('h1').style.background = 'var(--gradient-primary)';
+
+//Going sideways - sibling
+console.log(h1.previousElementSibling); //null
+console.log(h1.nextElementSibling);
+
+console.log(h1.previousSibling);
+console.log(h1.nextSibling);
+
+console.log(h1.parentElement.children);
+[...h1.parentElement.children].forEach(function (el) {
+  if (el !== h1) el.style.transform = 'scale(0.5)';
+});
 */
