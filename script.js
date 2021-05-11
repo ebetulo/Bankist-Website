@@ -165,7 +165,6 @@ const header = document.querySelector('.header');
 const navHeight = nav.getBoundingClientRect().height;
 const stickyNav = function (entries) {
   const [entry] = entries;
-  console.log(entry);
   if (!entry.isIntersecting) nav.classList.add('sticky');
   else nav.classList.remove('sticky');
 };
@@ -181,7 +180,7 @@ headerObserver.observe(header);
 const allSections = document.querySelectorAll('.section');
 const revealSec = function (entries, observer) {
   const [entry] = entries;
-  console.log(entry);
+
   if (!entry.isIntersecting) return;
   entry.target.classList.remove('section--hidden');
   observer.unobserve(entry.target);
@@ -197,6 +196,27 @@ allSections.forEach(function (sec) {
   sec.classList.add('section--hidden');
 });
 
+//Lazy Loading Images
+const imgTargets = document.querySelectorAll('img[data-src]');
+const loadImg = function (entries, observer) {
+  const [entry] = entries; //We have only 1 threshold so only 1 entries.
+  console.log(entry);
+  if (!entry.isIntersecting) return;
+  //Replace src with data-src
+  entry.target.src = entry.target.dataset.src;
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+  observer.unobserve(entry.target);
+};
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+});
+imgTargets.forEach(function (img) {
+  imgObserver.observe(img);
+});
 /*
 //Course
 //13.183
