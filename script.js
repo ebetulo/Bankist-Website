@@ -217,6 +217,26 @@ const imgObserver = new IntersectionObserver(loadImg, {
 imgTargets.forEach(function (img) {
   imgObserver.observe(img);
 });
+
+//Slider Component
+// const slides = document.querySelectorAll('.slide');
+// const btnLeft = document.querySelector('.slider__btn--left');
+// const btnRight = document.querySelector('slider__.btn--right');
+// let currentSlide = 0;
+// const maxSlide = slides.length;
+// //Next Slide
+// btnRight.addEventListener('click', function () {
+//   if (currentSlide === maxSlide - 1) {
+//     currentSlide = 0;
+//   } else {
+//     currentSlide++;
+//   }
+
+//   slides.forEach(
+//     (s, i) => (s.style.transform = `translateX(${100 * (i - currentSlide)}%)`)
+//   );
+// });
+
 /*
 //Course
 //13.183
@@ -361,3 +381,16 @@ console.log(h1.parentElement.children);
   if (el !== h1) el.style.transform = 'scale(0.5)';
 });
 */
+document.addEventListener('DOMContentLoaded', function (e) {
+  console.log('HTML is parsed and DOM Tree built', e);
+});
+
+window.addEventListener('load', function (e) {
+  console.log('Page fully loaded');
+});
+
+window.addEventListener('beforeunload', function (e) {
+  e.preventDefault();
+  console.log(e);
+  e.returnValue = '';
+});
